@@ -47,34 +47,6 @@ const terminalCommands = [
 			}
 		},
 	},
-	{
-		name: 'tod',
-		description: 'Truth or Dare',
-		awaitMessage: 'Thinking...',
-		execute: async (args: String[]) => {
-			let truthOrDare = Math.random() > 0.5 ? 'Truth' : 'Dare'
-			terminalOutput.innerHTML += `<p>${truthOrDare}</p>`
-
-			terminalInput.style.display = 'block'
-			// wait for the user to input something
-			//TODO: fix input handling
-			await new Promise((resolve: any) => {
-				terminalInput.addEventListener(
-					'keydown',
-					(event: KeyboardEvent) => {
-						if (event.key === 'Enter') {
-							if (terminalInput.innerHTML.length > 0) {
-								terminalInput.style.display = 'none'
-								console.log('hello')
-								terminalOutput.innerHTML += `<p>Yes</p>`
-								resolve()
-							}
-						}
-					}
-				)
-			})
-		},
-	},
 ]
 
 const handleTerminalInput = async (event: KeyboardEvent) => {
@@ -95,6 +67,8 @@ const handleTerminalInput = async (event: KeyboardEvent) => {
 			if (commandObject) {
 				let awaitMessage = 'Processing...'
 				terminalOutput.innerHTML += `<p id="await-message">${awaitMessage}</p>`
+				scrollToBottom() // await message also needs to be at bottom
+
 				await commandObject.execute(args)
 				document.querySelector('#await-message')?.remove() //TODO: fix this
 			} else {
